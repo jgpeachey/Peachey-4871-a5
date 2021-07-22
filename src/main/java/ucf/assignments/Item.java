@@ -1,6 +1,7 @@
 package ucf.assignments;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 public class Item {
@@ -22,7 +23,7 @@ public class Item {
     }
 
     public void setValue(BigDecimal value) {
-        this.value = value;
+        this.value = value.setScale(2, RoundingMode.HALF_EVEN);
     }
 
     public String getSerialNumber() {
