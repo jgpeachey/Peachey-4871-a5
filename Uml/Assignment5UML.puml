@@ -1,0 +1,83 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class App {
+    main()
+    start()
+}
+
+class Item{
+    -name
+    -value
+    -serialNumber
+
+    +getName()
+    +setName()
+    +getValue()
+    +setValue()
+    +getSerialNumber()
+    +setSerialNumber()
+
+    +toString()
+}
+
+class MainWindowController{
+    +initialize()
+    +getTableIndex()
+
+    -clickedNewItemButton()
+    -clickedEditItem()
+    -clickedSort()
+    -clickedClearList()
+    -clickedRemoveItem()
+    -clickedSaveList()
+    -clickedLoadList()
+}
+
+class NewItemWindowController{
+    -clickedSave()
+    -createDialogue(String)
+
+    +setOnItemAdded()
+}
+
+class EditItemWindowController{
+    -clickedSave()
+    -createDialogue(String)
+
+    +setOnItemEdited()
+}
+
+class ListCentral {
+    +ObservableList displayList
+    +ObservableList list
+
+    +indexConverter(int)
+    +getDisplayList()
+    +getWholeList()
+    +setList(ObservableList)
+    +addItem(Item)
+    +removeItem(int)
+    +removeAllItems()
+    +editItemInfo(int index, String name, String description, LocalDate date)
+    +markComplete(int)
+    +markIncomplete(int)
+    +sortItems(String)
+}
+
+class FileCentral {
+    +saveList(ObservableList, File)
+    +loadList(File)
+}
+
+javafx.Application <|--- App
+javafx.MainWindow o-- javafx.NewItemWindow
+javafx.MainWindow o-- javafx.EditItemWindow
+
+App o-- ListCentral
+App o-- FileCentral
+App o-- EditItemWindowController
+App o-- NewItemWindowController
+App o-- MainWindowController
+ListCentral o-- Item
+@enduml
