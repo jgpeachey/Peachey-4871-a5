@@ -20,6 +20,8 @@ import javafx.stage.StageStyle;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -31,6 +33,8 @@ public class MainWindowController implements Initializable {
 
     //file chooser setup
     FileChooser fileChooser = new FileChooser();
+    FileChooser.ExtensionFilter html = new FileChooser.ExtensionFilter("HTML file", "*.html");
+    FileChooser.ExtensionFilter txt = new FileChooser.ExtensionFilter("Text file", "*.txt");
 
     //tableview set up
     @FXML
@@ -52,6 +56,8 @@ public class MainWindowController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //set up file chooser
         fileChooser.setInitialDirectory(new File("C:\\"));
+        //set file type
+        fileChooser.getExtensionFilters().addAll(html, txt);
         //set column value types
         nameColumn.setCellValueFactory(new PropertyValueFactory<Item, String>("name"));
         serialNumberColumn.setCellValueFactory(new PropertyValueFactory<Item, Set<String>>("serialNumber"));
@@ -99,7 +105,13 @@ public class MainWindowController implements Initializable {
         return index;
     }
 
-//    interfaces and corresponding methods
+    public void clickedHelp(ActionEvent actionEvent) throws URISyntaxException {
+        //create link for help video
+        URI uri = new URI("https://youtu.be/dQw4w9WgXcQ");
+        inv.helpEmOut(uri);
+    }
+
+    //    interfaces and corresponding methods
     //set up interface for adding item
     interface OnItemEdited{
         void editItem(String name, BigDecimal value, String serialNumber);
@@ -184,7 +196,7 @@ public class MainWindowController implements Initializable {
         //set window name
         fileChooser.setTitle("Save File");
         //set file type
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("text file", "*.txt"));
+        fileChooser.setSelectedExtensionFilter(txt);
         //create file
         File savedInventory = fileChooser.showSaveDialog(new Stage());
         if (savedInventory != null){
@@ -197,7 +209,7 @@ public class MainWindowController implements Initializable {
         //set window name
         fileChooser.setTitle("Save File");
         //set file type
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("HTML file", "*.html"));
+        fileChooser.setSelectedExtensionFilter(html);
         //create file
         File savedInventory = fileChooser.showSaveDialog(new Stage());
         if (savedInventory != null){
@@ -210,10 +222,10 @@ public class MainWindowController implements Initializable {
         //set window name
         fileChooser.setTitle("Load File");
         //set file type
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("text file", "*.txt"));
+        fileChooser.setSelectedExtensionFilter(txt);
         //load file
-        File chosenList = fileChooser.showOpenDialog(new Stage());
-        tableView.setItems(inv.setList(file.loadTSVInventory(chosenList)));
+        File chosenFile = fileChooser.showOpenDialog(new Stage());
+        tableView.setItems(inv.setList(file.loadTSVInventory(chosenFile)));
     }
 
     @FXML
@@ -221,10 +233,10 @@ public class MainWindowController implements Initializable {
         //set window name
         fileChooser.setTitle("Load File");
         //set file type
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("HTML file", "*.html"));
+        fileChooser.setSelectedExtensionFilter(html);
         //load file
-        File chosenList = fileChooser.showOpenDialog(new Stage());
-        tableView.setItems(inv.setList(file.loadHTMLInventory(chosenList)));
+        File chosenFile = fileChooser.showOpenDialog(new Stage());
+        tableView.setItems(inv.setList(file.loadHTMLInventory(chosenFile)));
     }
 
     @FXML

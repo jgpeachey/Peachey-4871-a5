@@ -28,7 +28,7 @@ public class FileCentral {
             FileWriter fileWriter = new FileWriter(outputFile);
             PrintWriter writer = new PrintWriter(fileWriter);
             //write appropriate statements to file
-            writer.printf("%1$20s\t\t%2$3s\t\t%3$3s\n", "Value($)", "Serial Number", "Name");
+            writer.printf("\t%s\t%s\t\t%s\n", "Value($)", "Serial Number", "Name");
             //go through array to print output to file
             for (Item item : inventory) {
                 // print entire item info in one loop
@@ -36,7 +36,7 @@ public class FileCentral {
                 String serialNumber = item.getSerialNumber();
                 BigDecimal value = new BigDecimal(item.getValue().toString());
                 //writer.print(inventory.get(i).getValue().toString()+"\t");
-                writer.printf("%1$20s\t\t%2$3s\t\t%3$3s\n", value, serialNumber, name);
+                writer.printf("\t%s\t\t%s\t\t%s\t\n", value, serialNumber, name);
             }
             fileWriter.close();
         }
@@ -66,45 +66,44 @@ public class FileCentral {
     public ObservableList<Item> loadTSVInventory(File inputFile) throws IOException {
         //create observable list
         ObservableList<Item> inventory = FXCollections.observableArrayList();
+        //create temp array to store data
+        ArrayList<String> temp = new ArrayList<>();
 
-        StringTokenizer in ;
+        //create readers and patterns
         BufferedReader TSVFile = new BufferedReader(new FileReader(inputFile));
-        String itemLine = TSVFile.readLine(); // Read first line.
+        String regexString = Pattern.quote("\t")+"(.*?)"+Pattern.quote("\t");
+        Pattern p = Pattern.compile(regexString);
 
-        while (itemLine != null){
-            in = new StringTokenizer(itemLine,"\t");
-            while(in.hasMoreElements()){
-                BigDecimal value = new BigDecimal("10.0");
-                String serialNumber = in.nextElement().toString();
-                String name = in.nextElement().toString();
-                inventory.add(new Item(name, value, serialNumber));
+        //skip first line
+        String itemLine = TSVFile.readLine();
+        //take in first line of data
+        itemLine = TSVFile.readLine();
+
+        //loop through entire document
+        while (itemLine != null) {
+            //set matcher to current line
+            Matcher m = p.matcher(itemLine);
+            //find pattern and take in data between
+            while (m.find()){
+                temp.add(m.group(1));
             }
-            itemLine = TSVFile.readLine(); // Read next line of data.
+            //take in next line
+            itemLine = TSVFile.readLine();
         }
-        // Close the file once all data has been read.
-        TSVFile.close();
-//        //load file
-//        try {
-//            Scanner in = new Scanner(inputFile);
-//            //skips table headers
-//            in.next(); in.next(); in.next();
-//            in.useDelimiter("\t");
-//            in.skip(" ");
-//            // reads next input from file
-//            while (in.hasNextLine()) {
-//                //get data for an item
-//                BigDecimal value = new BigDecimal(in.next());
-//                String serialNumber = in.next();
-//                String name = in.next();
-//                //set file data to list
-//                inventory.add(new Item(name, value, serialNumber));
-//            }
-//        }
-//        //catch method to make sure file is found
-//        catch (FileNotFoundException e){
-//            System.out.println("File not found.");
-//            e.printStackTrace();
-//        }
+
+        //set up item
+        String value = null;
+        String serialNumber = null;
+        String name = null;
+
+        //loop through temp and create items
+        for (int i = 0; i < temp.size(); i+=3) {
+            value = temp.get(i);
+            serialNumber = temp.get(i+1);
+            name = temp.get(i+2);
+            //adds items
+            inventory.add(new Item(name, new BigDecimal(value), serialNumber));
+        }
         //set list in list central
         inv.setList(inventory);
         //return
@@ -151,6 +150,7 @@ public class FileCentral {
             inventory.add(new Item(name, new BigDecimal(value), serialNumber));
         }
 
+        inv.setList(inventory);
         return inventory;
     }
 

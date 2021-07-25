@@ -3,7 +3,10 @@ package ucf.assignments;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.awt.*;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URI;
 
 public class InventoryCentral {
 
@@ -76,5 +79,16 @@ public class InventoryCentral {
         inventory.getDisplayList().remove(0, inventory.getDisplayList().size());
         inventory.getEntireList().remove(0, inventory.getEntireList().size());
         return inventory.getEntireList();
+    }
+
+    public void helpEmOut(URI uri){
+        if (Desktop.isDesktopSupported()){
+            try{
+                Desktop.getDesktop().browse(uri);
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+        }
     }
 }
