@@ -17,41 +17,51 @@ class Item{
     +setValue()
     +getSerialNumber()
     +setSerialNumber()
+}
 
-    +toString()
+class Inventory{
+    -displayList
+    -entireList
+
+    +getDisplayList()
+    +setDisplayList()
+    +getEntireList()
+    +getEntireList()
 }
 
 class MainWindowController{
     +initialize()
     +getTableIndex()
 
-    -clickedNewItemButton()
+    -clickedNewItem()
     -clickedEditItem()
-    -clickedSort()
-    -clickedClearList()
     -clickedRemoveItem()
-    -clickedSaveList()
-    -clickedLoadList()
+    -clickedHelp()
+    -clickedSaveTSVInventory()
+    -clickedLoadTSVInventory()
+    -clickedSaveHTMLInventory()
+    -clickedLoadHTMLInventory()
 }
 
 class NewItemWindowController{
     -clickedSave()
     -createDialogue(String)
 
+    +numFormat()
     +setOnItemAdded()
+    +setOnIsUnique()
 }
 
 class EditItemWindowController{
     -clickedSave()
     -createDialogue(String)
 
+    +numFormat()
     +setOnItemEdited()
+    +setOnIsUnique()
 }
 
 class ListCentral {
-    +ObservableList displayList
-    +ObservableList list
-
     +indexConverter(int)
     +getDisplayList()
     +getWholeList()
@@ -59,15 +69,15 @@ class ListCentral {
     +addItem(Item)
     +removeItem(int)
     +removeAllItems()
-    +editItemInfo(int index, String name, String description, LocalDate date)
-    +markComplete(int)
-    +markIncomplete(int)
-    +sortItems(String)
+    +editItemInfo(int index, String name, BigDecimal value, String serialNumber)
+    +helpEmOut(URI uri)
 }
 
 class FileCentral {
-    +saveList(ObservableList, File)
-    +loadList(File)
+    +saveTSVInventory(ObservableList, File)
+    +saveHTMLInventory(ObservableList, File)
+    +loadTSVInventory(File)
+    +loadHTMLInventory(File)
 }
 
 javafx.Application <|--- App
@@ -80,4 +90,5 @@ App o-- EditItemWindowController
 App o-- NewItemWindowController
 App o-- MainWindowController
 ListCentral o-- Item
+ListCentral o-- Inventory
 @enduml
