@@ -20,9 +20,11 @@ public class InventoryCentral {
     //create a index conversion
     public int indexConverter(int index){
         int i = 0;
-        //convert index
-        while (!inventory.getDisplayList().get(index).equals(inventory.getEntireList().get(i))){
-            i++;
+        if (index != 0) {
+            //convert index
+            while (!inventory.getDisplayList().get(index).equals(inventory.getEntireList().get(i))) {
+                i++;
+            }
         }
         return i;
     }
@@ -41,7 +43,7 @@ public class InventoryCentral {
 
     public ObservableList<Item> setList(ObservableList<Item> newList){
         //clear any existing list
-        //removeAllItems();
+        removeAllItems();
         //add loaded list
         inventory.setEntireList(newList);
         inventory.setDisplayList(newList);
@@ -74,6 +76,14 @@ public class InventoryCentral {
         return inventory.getDisplayList();
     }
 
+    public ObservableList<Item> removeItem(Item item){
+        // remove item from display list
+        inventory.getDisplayList().remove(item);
+        // remove item from list
+        inventory.getEntireList().remove(item);
+        return inventory.getDisplayList();
+    }
+
     public ObservableList<Item> removeAllItems(){
         //remove everything from every list
         inventory.getDisplayList().remove(0, inventory.getDisplayList().size());
@@ -81,7 +91,7 @@ public class InventoryCentral {
         return inventory.getEntireList();
     }
 
-    public void helpEmOut(URI uri){
+    public boolean helpEmOut(URI uri){
         if (Desktop.isDesktopSupported()){
             try{
                 Desktop.getDesktop().browse(uri);
@@ -90,5 +100,6 @@ public class InventoryCentral {
                 e.printStackTrace();
             }
         }
+        return Desktop.isDesktopSupported();
     }
 }

@@ -15,7 +15,7 @@ public class Inventory {
     }
 
     public void setDisplayList(ObservableList<Item> displayList) {
-        this.displayList = displayList;
+        this.displayList.setAll(displayList);
     }
 
     public ObservableList<Item> getEntireList() {
@@ -23,6 +23,6 @@ public class Inventory {
     }
 
     public void setEntireList(ObservableList<Item> entireList) {
-        this.entireList = entireList;
+        this.entireList.setAll(entireList);
     }
 }
